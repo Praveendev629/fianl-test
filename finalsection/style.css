@@ -206,30 +206,43 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-/* Fingerprint Sensor Style */
+/* Fingerprint Sensor Style - 3D Overlap */
 .fingerprint-sensor {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
-    background: rgba(255, 62, 96, 0.1);
-    border: 2px solid var(--accent-color);
+    background: rgba(255, 62, 96, 0.3);
+    backdrop-filter: blur(8px);
+    border: 3px solid var(--accent-color);
     position: fixed;
-    bottom: 40px;
+    bottom: 80px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    z-index: 1100;
-    transition: all 0.3s ease;
-    overflow: hidden;
+    z-index: 2000;
+    /* Above video */
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.8),
+        inset 0 0 20px rgba(255, 62, 96, 0.6);
 }
 
 .fingerprint-sensor::before {
-    content: '☝️';
-    font-size: 2rem;
+    content: '';
+    width: 60px;
+    height: 60px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff3e60'%3E%3Cpath d='M17.81 4.47c-.08 0-.16-.02-.23-.06C15.66 3.42 14 3 12.01 3c-1.98 0-3.86.47-5.57 1.41-.24.13-.54.04-.67-.2-.13-.24-.04-.54.2-.67C7.82 2.51 9.84 2 12.01 2c2.12 0 3.91.46 5.8 1.49.24.13.33.44.2.68-.09.13-.23.3-.39.3-.01 0-.01 0 0 0zM12 22a.49.49 0 0 1-.48-.37c-.12-.44.04-.66.21-.86.34-.41.7-.82 1.05-1.23a1.53 1.53 0 0 0 .19-1.9c-.31-.5-.85-.81-1.45-.81a1.76 1.76 0 0 0-1.74 1.76.5.5 0 1 1-1 0A2.76 2.76 0 0 1 11.52 14.87c.92 0 1.77.48 2.25 1.25.64.95.53 2.19-.24 3.12l-1.05 1.23c-.15.17-.18.27-.13.43.06.21.14.3.33.3h.32a.5.5 0 0 1 0 1H12zm2.94-7.81c-.2.02-.4-.1-.47-.3-.21-.71-.53-1.35-.95-1.91-.17-.23-.12-.54.11-.71.23-.17.54-.12.71.11.49.66.86 1.4 1.1 2.21.07.25-.07.52-.32.59-.06.01-.12.01-.18.01zM12.01 9a3 3 0 0 0-3 3 .5.5 0 0 1-1 0 4 4 0 1 1 4 4 .5.5 0 0 1 0-1 3 3 0 1 0 0-6zm.01-4c-3.11 0-5.83 2-7.14 4.88-.13.25-.43.34-.68.21-.25-.13-.34-.43-.21-.68C5.51 6.16 8.56 4 12.02 4c3.12 0 5.14 1.72 6.55 3.3.18.21.16.52-.05.7-.21.18-.52.16-.7-.05-1.25-1.4-3.14-2.95-5.8-2.95zM12.01 7a5 5 0 0 0-5 5 .5.5 0 0 1-1 0c0-3.31 2.69-6 6-6s6 2.69 6 6 a.5.5 0 0 1-1 0c0-2.76-2.24-5-5-5z'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
     z-index: 2;
+    transition: transform 0.2s ease;
+}
+
+.fingerprint-sensor.active::before {
+    transform: scale(0.85);
+    filter: brightness(1.5) drop-shadow(0 0 15px var(--accent-color));
 }
 
 .fingerprint-sensor .ring {
@@ -265,18 +278,21 @@ body {
 
 .bubble-message {
     position: absolute;
-    top: -60px;
+    top: -95px;
     left: 50%;
     transform: translateX(-50%);
-    background: var(--glass);
-    backdrop-filter: blur(10px);
-    padding: 0.8rem 1.2rem;
-    border-radius: 20px;
-    font-size: 0.9rem;
+    background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+    color: white;
+    padding: 0.9rem 1.5rem;
+    border-radius: 15px;
+    font-size: 1.1rem;
+    font-weight: 600;
     white-space: nowrap;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    animation: float 3s infinite ease-in-out;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+    animation: bounce3D 2s infinite;
+    z-index: 2100;
+    pointer-events: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .bubble-message::after {
@@ -287,7 +303,19 @@ body {
     transform: translateX(-50%);
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
-    border-top: 10px solid rgba(255, 255, 255, 0.1);
+    border-top: 10px solid var(--accent-color);
+}
+
+@keyframes bounce3D {
+
+    0%,
+    100% {
+        transform: translateX(-50%) translateY(0) scale(1);
+    }
+
+    50% {
+        transform: translateX(-50%) translateY(-15px) scale(1.05);
+    }
 }
 
 .fingerprint-sensor .progress-ring {
@@ -356,6 +384,22 @@ body {
     margin: 0 auto;
 }
 
+.door-text {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    color: white;
+    z-index: 600;
+    text-align: center;
+    pointer-events: none;
+    opacity: 0;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
 #secretVideo {
     position: fixed;
     top: 0;
@@ -364,8 +408,15 @@ body {
     height: 100vh;
     object-fit: cover;
     background: black;
-    z-index: 1000;
-    transition: opacity 0.5s ease;
+    z-index: 500;
+    transition: opacity 1.5s ease;
+    /* Slower fade for the video */
+    opacity: 0;
+    /* Starts hidden */
+}
+
+#secretVideo.active {
+    filter: brightness(1);
 }
 
 #video-trigger {

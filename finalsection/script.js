@@ -103,7 +103,7 @@ function showImageSection() {
 
 function handleImageClick() {
     if (state.currentImageIndex === 1) {
-        showPopups();
+        launchConfetti();
     }
 
     if (state.currentImageIndex < state.images.length - 1) {
@@ -114,21 +114,84 @@ function handleImageClick() {
     }
 }
 
-function showPopups() {
-    const left = document.createElement('div');
-    left.className = 'popup left';
-    left.innerText = 'Surprise! ✨';
-    document.body.appendChild(left);
+function launchConfetti() {
+    for (let i = 0; i < 50; i++) {
+        createConfettiParticle(true); // Left side
+        createConfettiParticle(false); // Right side
+    }
+}
 
-    const right = document.createElement('div');
-    right.className = 'popup right';
-    right.innerText = 'Something special! 💖';
-    document.body.appendChild(right);
+function createConfettiParticle(isLeft) {
+    const confetti = document.createElement('div');
+    const colors = ['#ff3e60', '#ff9a8b', '#ffb400', '#ffffff', '#4ade80', '#60a5fa'];
 
-    setTimeout(() => {
-        left.remove();
-        right.remove();
-    }, 3000);
+    confetti.style.position = 'fixed';
+    confetti.style.width = Math.random() * 8 + 6 + 'px';
+    confetti.style.height = Math.random() * 10 + 4 + 'px';
+    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    confetti.style.borderRadius = Math.random() > 0.5 ? '2px' : '50%';
+    confetti.style.zIndex = '3000';
+
+    const startX = isLeft ? window.innerWidth * 0.2 : window.innerWidth * 0.8;
+    const startY = window.innerHeight + 10;
+
+    confetti.style.left = startX + 'px';
+    confetti.style.top = startY + 'px';
+
+    document.body.appendChild(confetti);
+
+    // Physics properties
+    const angle = isLeft ? (270 + Math.random() * 40 - 20) : (270 + Math.random() * 40 - 20); // Launch upwards
+    const velocity = Math.random() * 20 + 25; // Higher initial velocity to counter gravity upward
+    const gravity = 0.25; // Slower fall
+    const friction = 0.96; // Slightly more resistance for a "pop" effect
+
+    let currentX = startX;
+    let currentY = startY;
+    let velX = Math.cos(angle * Math.PI / 180) * velocity;
+    let velY = Math.sin(angle * Math.PI / 180) * velocity;
+
+    // Rotation properties
+    let rotationX = Math.random() * 360;
+    let rotationY = Math.random() * 360;
+    let rotationZ = Math.random() * 360;
+    const rotationSpeedX = Math.random() * 10 - 5;
+    const rotationSpeedY = Math.random() * 10 - 5;
+    const rotationSpeedZ = Math.random() * 10 - 5;
+
+    // Drift/Wiggle
+    let wiggle = Math.random() * 1000;
+    const wiggleSpeed = 0.05 + Math.random() * 0.05;
+
+    const animation = setInterval(() => {
+        // Apply physics
+        velX *= friction;
+        velY += gravity;
+
+        currentX += velX + Math.sin(wiggle) * 1.5; // Added horizontal drift
+        currentY += velY;
+        wiggle += wiggleSpeed;
+
+        // Apply rotation
+        rotationX += rotationSpeedX;
+        rotationY += rotationSpeedY;
+        rotationZ += rotationSpeedZ;
+
+        confetti.style.left = currentX + 'px';
+        confetti.style.top = currentY + 'px';
+        confetti.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg) rotateZ(${rotationZ}deg)`;
+
+        // Fade out as it falls
+        if (currentY > window.innerHeight * 0.7) {
+            const opacity = Math.max(0, 1 - (currentY - window.innerHeight * 0.7) / (window.innerHeight * 0.3));
+            confetti.style.opacity = opacity;
+        }
+
+        if (currentY > window.innerHeight || currentX < -200 || currentX > window.innerWidth + 200) {
+            clearInterval(animation);
+            confetti.remove();
+        }
+    }, 20);
 }
 
 function showLetterOption() {
@@ -160,12 +223,13 @@ async function showLetter() {
       <div style="text-align: right; margin-top: 2rem; font-weight: 600; font-family: 'Outfit'; color: var(--accent-color); font-size: 1.2rem;">- Praveen</div>
     </div>
     <div id="letter-actions" style="margin-top: 2rem;">
-      <button class="button" id="someone-came-btn">someone had come to see you</button>
+      <div class="message" style="opacity: 1; font-size: 1.2rem; display: block;">Someone had come to see you! 😍✨</div>
+      <button class="button" id="see-who-btn" style="margin-top: 1rem;">See who had come to see you 👀💖</button>
     </div>
   `;
     app.appendChild(letterDiv);
 
-    // Heart felt effect - floating hearts
+    // Floating hearts effect
     for (let i = 0; i < 15; i++) {
         const heart = document.createElement('div');
         heart.innerHTML = '❤️';
@@ -184,17 +248,15 @@ async function showLetter() {
         setTimeout(() => heart.remove(), 5000);
     }
 
-    const btn = document.getElementById('someone-came-btn');
-    btn.onclick = () => {
-        btn.style.display = 'none';
-        const nextText = document.createElement('div');
-        nextText.className = 'reveal-text';
-        nextText.innerText = 'see who had come to see you';
-        document.getElementById('letter-actions').appendChild(nextText);
+    document.getElementById('see-who-btn').onclick = () => {
+        // Fade out letter
+        letterDiv.style.animation = 'fadeOut 1s forwards';
+        document.getElementById('letter-actions').style.animation = 'fadeOut 1s forwards';
 
         setTimeout(() => {
+            clearApp();
             setupVideoTrigger();
-        }, 2000);
+        }, 1000);
     };
 }
 
@@ -204,23 +266,54 @@ function setupVideoTrigger() {
     const trigger = document.createElement('div');
     trigger.id = 'fingerprint-sensor';
     trigger.className = 'fingerprint-sensor';
-    trigger.innerHTML = '<div class="ring"></div><div class="ring" style="animation-delay: 0.4s;"></div>';
+    trigger.innerHTML = `
+    <div class="bubble-message">Hold this circle to see Praveen 💖</div>
+    <div class="progress-ring"></div>
+    <div class="ring"></div>
+    <div class="ring" style="animation-delay: 0.4s;"></div>
+  `;
     document.body.appendChild(trigger);
 
-    secretVideo.style.opacity = '0';
+    const doorText = document.createElement('div');
+    doorText.className = 'door-text';
+    doorText.innerText = 'door is opening to see praveen... 🚪✨';
+    document.body.appendChild(doorText);
+
     secretVideo.style.display = 'block';
     secretVideo.style.pointerEvents = 'none';
+    secretVideo.style.opacity = '0';
+
+    let revealTimer;
+    let textFadeTimer;
 
     const playVideo = (e) => {
         if (e.cancelable) e.preventDefault();
         trigger.classList.add('active');
-        secretVideo.style.opacity = '1';
-        secretVideo.play();
+
+        // Start narrative sequence
+        doorText.style.transition = 'opacity 1s ease';
+        doorText.style.opacity = '1';
+
+        textFadeTimer = setTimeout(() => {
+            doorText.style.opacity = '0';
+            secretVideo.style.opacity = '1';
+
+            revealTimer = setTimeout(() => {
+                secretVideo.play();
+            }, 1000); // Wait for fade-in to be well underway before playing
+        }, 2000); // Show text for 2 seconds before starting video reveal
     };
 
     const stopVideo = (e) => {
         if (e.cancelable) e.preventDefault();
         trigger.classList.remove('active');
+
+        // Clear all timers
+        clearTimeout(textFadeTimer);
+        clearTimeout(revealTimer);
+
+        // Reset visuals
+        doorText.style.opacity = '0';
         secretVideo.style.opacity = '0';
         secretVideo.pause();
         secretVideo.currentTime = 0;
