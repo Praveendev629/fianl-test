@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Secure Access</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- SECTION 1: LOADER -->
+    <div id="loader-section" class="section active">
+        <div class="loader-content">
+            <div class="spinner"></div>
+            <p class="fade-text">Initializing Secure Connection...</p>
+        </div>
+    </div>
+
+    <!-- SECTION 2: PASSWORD GATE -->
+    <div id="gate-section" class="section hidden">
+        <div class="glass-card">
+            <div class="icon-lock">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+            </div>
+            <h1>Restricted Access</h1>
+            <p class="subtitle">Enter the access code to continue.</p>
+
+            <div class="input-group">
+                <input type="password" id="password-input" placeholder="Enter Password" maxlength="20">
+                <span class="toggle-password" onclick="togglePasswordVisibility()">
+                    <svg id="eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                </span>
+                <button id="enter-btn" onclick="validatePassword()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="actions">
+                <a href="#" id="whatsapp-link" class="unlock-btn" target="_blank">
+                    <span>Unlock Password</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </a>
+                <div class="hint-bubble">
+                    <div class="hint-tail top"></div>
+                    <span class="hint-text">Don't know the password? Tap above! 👆</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 3: REVEAL PRIZE (Intermediate) -->
+    <div id="reveal-section" class="section hidden">
+        <div class="glass-card reveal-content" id="reveal-card">
+            <div class="tap-icon">🎁</div>
+            <h1>Yo! You Unlocked It!</h1>
+            <p class="subtitle">Want to see your prize?</p>
+            <p style="margin-top:20px; font-weight:600; color:var(--secondary);">TAP ONCE TO REVEAL</p>
+        </div>
+    </div>
+
+    <!-- SECTION 4: PROTECTED CONTENT -->
+    <div id="content-section" class="section hidden">
+        <div class="glass-card large">
+            <div class="success-icon">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            </div>
+            <h1>Access Granted</h1>
+            <p class="subtitle">You can now download the file.</p>
+
+            <div id="creator-text" class="creator-text">Made by Praveen</div>
+
+            <div class="qr-container">
+                <!-- Placeholder QR Code - User should replace src with actual QR -->
+                <img src="assets/qr-placeholder.png" alt="QR Code" id="qr-image" class="qr-img">
+            </div>
+
+            <button onclick="downloadQR()" class="download-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Download QR Image
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

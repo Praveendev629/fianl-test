@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encrypted Access Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Background Elements -->
+    <div class="background-orb orb-1"></div>
+    <div class="background-orb orb-2"></div>
+    <div class="grid-overlay"></div>
+
+    <main class="viewport">
+        <!-- View 1: Authorization -->
+        <section id="view-intro" class="view active">
+            <div class="card glass">
+                <div class="icon-pulse">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <div class="content">
+                    <div class="status-badge">
+                        <span class="dot red"></span> Locked
+                    </div>
+                    <h1>Protected Document</h1>
+                    <p>This file contains sensitive information. Biometric or manual authorization is required to
+                        proceed.</p>
+
+                    <button id="auth-btn" class="glow-on-hover">
+                        <i class="fas fa-fingerprint"></i> AUTHORIZE ACCESS
+                    </button>
+
+                    <div class="security-footer">
+                        <i class="fas fa-shield-alt"></i> End-to-End Encrypted
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- View 2: Prank Reveal -->
+        <section id="view-prank" class="view next">
+            <div class="card glass prank-card">
+                <div class="icon-bounce">
+                    <i class="fas fa-laugh-squint"></i>
+                </div>
+                <h1>ACCESS DENIED?</h1>
+                <h2 class="gradient-text">Just Kidding!</h2>
+                <p>Actually, there's no password. I just wanted to see you sweat for a second! 😎</p>
+                <div class="loader-bar">
+                    <div class="bar-fill"></div>
+                </div>
+                <p id="timer" class="timer-text">15 seconds remaining</p>
+                <p class="redirect-text">Redirecting to secure server...</p>
+            </div>
+        </section>
+
+        <!-- View 3: Download -->
+        <section id="view-download" class="view next">
+            <div class="card glass success-card">
+                <div class="icon-spin">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="status-badge success">
+                    <span class="dot green"></span> Verified
+                </div>
+                <h1>Access Granted</h1>
+                <p>Identity verified. The document has been decrypted and is ready for secure transfer.</p>
+                <p class="pdf-description">This PDF contains the password. yes you may think that this pdf has not the pasword just has before one. but im not kidding this pdf has the password and it is password protected 🔒</p>
+
+                <a href="password-protected.pdf" download="password-protected.pdf" class="download-btn-large">
+                    <div class="btn-content">
+                        <i class="fas fa-cloud-download-alt"></i>
+                        <span>DOWNLOAD PDF</span>
+                    </div>
+                    <div class="btn-shine"></div>
+                </a>
+
+                <p class="disclaimer">Link expires in 24 hours.</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
