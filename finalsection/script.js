@@ -58,7 +58,7 @@ function showDots(text, duration = 4000) {
 
 async function startFlow() {
     // Step 1: Thanks
-    await showMessage('Thanks for all your effort to see Praveen ❤️✨', true, 4000);
+    await showMessage('Thanks for all your effort to see Praveen', true, 4000);
 
     // Step 2: Coming soon
     await showDots('Praveen is coming to see you', 4000);
@@ -68,7 +68,7 @@ async function startFlow() {
     const warningDiv = document.createElement('div');
     warningDiv.className = 'message';
     warningDiv.style.opacity = '1';
-    warningDiv.innerHTML = 'Wait! Before you see Praveen, he sent you a small gift... 🎁<br>Would you like to open it?';
+    warningDiv.innerHTML = 'Wait! Before you see Praveen, he sent you a small gift...<br>Would you like to open it?';
     const btn = document.createElement('button');
     btn.className = 'button';
     btn.innerText = 'Open Gift';
@@ -115,83 +115,64 @@ function handleImageClick() {
 }
 
 function launchConfetti() {
-    for (let i = 0; i < 50; i++) {
-        createConfettiParticle(true); // Left side
-        createConfettiParticle(false); // Right side
+    const count = 100;
+    const defaults = {
+        origin: { y: 0.7 }
+    };
+
+    for (let i = 0; i < count; i++) {
+        createConfettiParticle(Math.random() > 0.5);
     }
 }
 
 function createConfettiParticle(isLeft) {
     const confetti = document.createElement('div');
-    const colors = ['#ff3e60', '#ff9a8b', '#ffb400', '#ffffff', '#4ade80', '#60a5fa'];
+    const colors = ['#ff3e60', '#ffb400', '#4ade80', '#60a5fa', '#a855f7', '#ec4899'];
 
-    confetti.style.position = 'fixed';
-    confetti.style.width = Math.random() * 8 + 6 + 'px';
-    confetti.style.height = Math.random() * 10 + 4 + 'px';
+    confetti.className = 'confetti-particle';
     confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-    confetti.style.borderRadius = Math.random() > 0.5 ? '2px' : '50%';
-    confetti.style.zIndex = '3000';
 
-    const startX = isLeft ? window.innerWidth * 0.2 : window.innerWidth * 0.8;
-    const startY = window.innerHeight + 10;
+    const size = Math.random() * 8 + 4;
+    confetti.style.width = size + 'px';
+    confetti.style.height = size + 'px';
 
-    confetti.style.left = startX + 'px';
-    confetti.style.top = startY + 'px';
+    const startX = isLeft ? -50 : window.innerWidth + 50;
+    const startY = window.innerHeight * (0.4 + Math.random() * 0.4);
 
     document.body.appendChild(confetti);
 
-    // Physics properties
-    const angle = isLeft ? (270 + Math.random() * 40 - 20) : (270 + Math.random() * 40 - 20); // Launch upwards
-    const velocity = Math.random() * 20 + 25; // Higher initial velocity to counter gravity upward
-    const gravity = 0.25; // Slower fall
-    const friction = 0.96; // Slightly more resistance for a "pop" effect
+    const destinationX = isLeft ? window.innerWidth * (0.1 + Math.random() * 0.4) : window.innerWidth * (0.5 + Math.random() * 0.4);
+    const destinationY = startY - (Math.random() * 300 + 100);
 
-    let currentX = startX;
-    let currentY = startY;
+    const angle = (isLeft ? -45 : 225) + (Math.random() * 30 - 15);
+    const velocity = Math.random() * 15 + 15;
+    const gravity = 0.4;
+    const friction = 0.98;
+
+    let curX = startX;
+    let curY = startY;
     let velX = Math.cos(angle * Math.PI / 180) * velocity;
     let velY = Math.sin(angle * Math.PI / 180) * velocity;
+    let rotation = Math.random() * 360;
+    let rotVel = Math.random() * 10 - 5;
 
-    // Rotation properties
-    let rotationX = Math.random() * 360;
-    let rotationY = Math.random() * 360;
-    let rotationZ = Math.random() * 360;
-    const rotationSpeedX = Math.random() * 10 - 5;
-    const rotationSpeedY = Math.random() * 10 - 5;
-    const rotationSpeedZ = Math.random() * 10 - 5;
-
-    // Drift/Wiggle
-    let wiggle = Math.random() * 1000;
-    const wiggleSpeed = 0.05 + Math.random() * 0.05;
-
-    const animation = setInterval(() => {
-        // Apply physics
+    const update = () => {
         velX *= friction;
         velY += gravity;
+        curX += velX;
+        curY += velY;
+        rotation += rotVel;
 
-        currentX += velX + Math.sin(wiggle) * 1.5; // Added horizontal drift
-        currentY += velY;
-        wiggle += wiggleSpeed;
+        confetti.style.transform = `translate3d(${curX}px, ${curY}px, 0) rotate(${rotation}deg)`;
 
-        // Apply rotation
-        rotationX += rotationSpeedX;
-        rotationY += rotationSpeedY;
-        rotationZ += rotationSpeedZ;
-
-        confetti.style.left = currentX + 'px';
-        confetti.style.top = currentY + 'px';
-        confetti.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg) rotateZ(${rotationZ}deg)`;
-
-        // Fade out as it falls
-        if (currentY > window.innerHeight * 0.7) {
-            const opacity = Math.max(0, 1 - (currentY - window.innerHeight * 0.7) / (window.innerHeight * 0.3));
-            confetti.style.opacity = opacity;
-        }
-
-        if (currentY > window.innerHeight || currentX < -200 || currentX > window.innerWidth + 200) {
-            clearInterval(animation);
+        if (curY > window.innerHeight + 100) {
             confetti.remove();
+        } else {
+            requestAnimationFrame(update);
         }
-    }, 20);
+    };
+
+    requestAnimationFrame(update);
 }
 
 function showLetterOption() {
@@ -216,15 +197,17 @@ async function showLetter() {
     letterDiv.className = 'letter';
     letterDiv.innerHTML = `
     <div style="background: rgba(255,255,255,0.95); color: #2d3436; padding: 2.5rem; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); font-family: 'Georgia', serif; line-height: 1.8; position: relative; overflow: hidden;">
-      <div style="position: absolute; top: -10px; right: -10px; font-size: 4rem; opacity: 0.1; color: var(--accent-color);">❤️</div>
+      <div class="letter-icon" style="position: absolute; top: 10px; right: 10px; opacity: 0.1; color: var(--accent-color);">
+        <svg width="60" height="60" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      </div>
       <h2 style="color: var(--accent-color); font-size: 2rem; margin-bottom: 1.5rem; font-family: 'Outfit';">Dearest,</h2>
       <p style="font-size: 1.1rem; margin-bottom: 1rem;">I wanted to tell you how much I appreciate every little effort you make. You are special, and I'm so lucky to have you in my life.</p>
-      <p style="font-size: 1.1rem;">Every moment feels better when you're around. Thank you for being the amazing person you are. ❤️✨</p>
+      <p style="font-size: 1.1rem;">Every moment feels better when you're around. Thank you for being the amazing person you are.</p>
       <div style="text-align: right; margin-top: 2rem; font-weight: 600; font-family: 'Outfit'; color: var(--accent-color); font-size: 1.2rem;">- Praveen</div>
     </div>
     <div id="letter-actions" style="margin-top: 2rem;">
-      <div class="message" style="opacity: 1; font-size: 1.2rem; display: block;">Someone had come to see you! 😍✨</div>
-      <button class="button" id="see-who-btn" style="margin-top: 1rem;">See who had come to see you 👀💖</button>
+      <div class="message" style="opacity: 1; font-size: 1.2rem; display: block;">Someone had come to see you!</div>
+      <button class="button" id="see-who-btn" style="margin-top: 1rem;">See who had come to see you</button>
     </div>
   `;
     app.appendChild(letterDiv);
@@ -232,7 +215,8 @@ async function showLetter() {
     // Floating hearts effect
     for (let i = 0; i < 15; i++) {
         const heart = document.createElement('div');
-        heart.innerHTML = '❤️';
+        heart.className = 'floating-heart';
+        heart.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
         heart.style.position = 'fixed';
         heart.style.left = Math.random() * 100 + 'vw';
         heart.style.top = '110vh';
@@ -267,17 +251,29 @@ function setupVideoTrigger() {
     trigger.id = 'fingerprint-sensor';
     trigger.className = 'fingerprint-sensor';
     trigger.innerHTML = `
-    <div class="bubble-message">Hold this circle to see Praveen 💖</div>
+    <div class="bubble-message">Hold to see Praveen</div>
     <div class="progress-ring"></div>
     <div class="ring"></div>
     <div class="ring" style="animation-delay: 0.4s;"></div>
   `;
     document.body.appendChild(trigger);
 
-    const doorText = document.createElement('div');
-    doorText.className = 'door-text';
-    doorText.innerText = 'door is opening to see praveen... 🚪✨';
-    document.body.appendChild(doorText);
+    const volumeWarning = document.createElement('div');
+    volumeWarning.className = 'volume-warning-hud';
+    volumeWarning.innerHTML = `
+        <div class="volume-hud-container">
+            <div class="volume-icon-wrapper">
+                <svg class="speaker-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 5L6 9H2V15H6L11 19V5Z"></path>
+                </svg>
+            </div>
+            <div class="volume-slider">
+                <div class="volume-level"></div>
+            </div>
+        </div>
+        <div class="volume-text">LOWER YOUR VOLUME</div>
+    `;
+    document.body.appendChild(volumeWarning);
 
     secretVideo.style.display = 'block';
     secretVideo.style.pointerEvents = 'none';
@@ -291,11 +287,11 @@ function setupVideoTrigger() {
         trigger.classList.add('active');
 
         // Start narrative sequence
-        doorText.style.transition = 'opacity 1s ease';
-        doorText.style.opacity = '1';
+        volumeWarning.style.transition = 'opacity 1s ease';
+        volumeWarning.style.opacity = '1';
 
         textFadeTimer = setTimeout(() => {
-            doorText.style.opacity = '0';
+            volumeWarning.style.opacity = '0';
             secretVideo.style.opacity = '1';
 
             revealTimer = setTimeout(() => {
@@ -313,7 +309,7 @@ function setupVideoTrigger() {
         clearTimeout(revealTimer);
 
         // Reset visuals
-        doorText.style.opacity = '0';
+        volumeWarning.style.opacity = '0';
         secretVideo.style.opacity = '0';
         secretVideo.pause();
         secretVideo.currentTime = 0;
