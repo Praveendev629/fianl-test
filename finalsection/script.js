@@ -285,8 +285,8 @@ function setupVideoTrigger() {
     const playVideo = (e) => {
         if (e.cancelable) e.preventDefault();
         trigger.classList.add('active');
-        trigger.style.opacity = '0';
-        trigger.style.pointerEvents = 'auto'; // Keep capturing events even when hidden
+        const bubble = trigger.querySelector('.bubble-message');
+        if (bubble) bubble.style.opacity = '0';
 
         // Start narrative sequence
         volumeWarning.style.transition = 'opacity 1s ease';
@@ -305,7 +305,8 @@ function setupVideoTrigger() {
     const stopVideo = (e) => {
         if (e.cancelable) e.preventDefault();
         trigger.classList.remove('active');
-        trigger.style.opacity = '1';
+        const bubble = trigger.querySelector('.bubble-message');
+        if (bubble) bubble.style.opacity = '1';
 
         // Clear all timers
         clearTimeout(textFadeTimer);
