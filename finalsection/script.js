@@ -58,7 +58,7 @@ function showDots(text, duration = 4000) {
 
 async function startFlow() {
     // Step 1: Thanks
-    await showMessage('Thanks for all your effort to see Praveen', true, 4000);
+    await showMessage('Thanks for all your effort to see Praveen💖 💝', true, 4000);
 
     // Step 2: Coming soon
     await showDots('Praveen is coming to see you', 4000);
@@ -202,8 +202,8 @@ async function showLetter() {
       </div>
       <h2 style="color: var(--accent-color); font-size: 2rem; margin-bottom: 1.5rem; font-family: 'Outfit';">Dearest,</h2>
       <p style="font-size: 1.1rem; margin-bottom: 1rem;">I wanted to tell you how much I appreciate every little effort you make. You are special, and I'm so lucky to have you in my life.</p>
-      <p style="font-size: 1.1rem;">Every moment feels better when you're around. Thank you for being the amazing person you are.</p>
-      <div style="text-align: right; margin-top: 2rem; font-weight: 600; font-family: 'Outfit'; color: var(--accent-color); font-size: 1.2rem;">- Praveen</div>
+      <p style="font-size: 1.1rem;">Itha patha odana un face la oru smila varum la pa antah smile ka tha na ivlovum pannen pa and ithu may be unna dissapoint panna thu nu nenaikiren. Thank you for being the amazing person you are.</p>
+      <div style="text-align: right; margin-top: 2rem; font-weight: 600; font-family: 'Outfit'; color: var(--accent-color); font-size: 1.2rem;">- P.S  [ never forget how amazing you are ]</div>
     </div>
     <div id="letter-actions" style="margin-top: 2rem;">
       <div class="message" style="opacity: 1; font-size: 1.2rem; display: block;">Someone had come to see you!</div>
