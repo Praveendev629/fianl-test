@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- Configuration ---
     const CONFIG = {
-        password: "243586", // Updated by User Request
+        password: "123456", // Updated by User Request
         whatsappNumber: "918122699623", // Updated by User Request
-        whatsappMessage: "Happy Pongal! 🌾☀️ May this festival illuminate your life with joy and prosperity. The password is: 243586",
+        whatsappMessage: "Happy Pongal! 🌾☀️ May this festival illuminate your life with joy and prosperity. The password is: 123456",
         loadingTime: 2500 // 2.5 seconds
     };
 
