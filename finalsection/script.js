@@ -325,6 +325,40 @@ function setupVideoTrigger() {
     trigger.addEventListener('touchcancel', stopVideo);
     trigger.addEventListener('mouseup', stopVideo);
     trigger.addEventListener('mouseleave', stopVideo);
+
+    // Final Section Trigger
+    secretVideo.onended = () => {
+        showFinalSection();
+    };
+}
+
+async function showFinalSection() {
+    // 1. Hide video and sensor
+    secretVideo.style.opacity = '0';
+    const sensor = document.getElementById('fingerprint-sensor');
+    const volumeHud = document.querySelector('.volume-warning-hud');
+    if (sensor) sensor.style.display = 'none';
+    if (volumeHud) volumeHud.style.display = 'none';
+
+    setTimeout(async () => {
+        secretVideo.style.display = 'none';
+
+        // 2. Intermediate message
+        await showMessage('one day praveen will meet you ....... 🤞🚲✨', true, 4000);
+
+        // 3. Show final message and WhatsApp button
+        clearApp();
+        const container = document.createElement('div');
+        container.className = 'final-section';
+        container.innerHTML = `
+            <div class="message">well !! thats it praveen had gone ✨😊</div>
+            <p style="margin-bottom: 2rem; opacity: 0.8;">You need to message Praveen...</p>
+            <a href="https://wa.me/918122699623" target="_blank" class="button whatsapp-btn">
+                Message Praveen
+            </a>
+        `;
+        app.appendChild(container);
+    }, 1500);
 }
 
 
