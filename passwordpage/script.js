@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const CONFIG = {
         password: "loke243856", // Updated by User Request
         whatsappNumber: "918122699623", // Updated by User Request
-        whatsappMessage: "இனிய பொங்கல் திருநால் நல்வாழ்த்துகள் தோழியே !!. may be this surprize unna dissapoint panna thu nu nenaikiren pa (◕ヮ◕)......The password is: loke243856",
+        whatsappMessage: "இனிய பொங்கல் திருநாள் நல்வாழ்த்துகள் தோழியே !!. may be this surprize unna dissapoint panna thu nu nenaikiren pa (◕ヮ◕)......The password is: loke243856",
         loadingTime: 2500 // 2.5 seconds
     };
 
